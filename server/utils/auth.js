@@ -1,8 +1,8 @@
-const jwt = require('jsonwebtoken');
+const jwt = require("jsonwebtoken");
 
 // set token secret and expiration date
-const secret = 'mysecretsshhhhh';
-const expiration = '2h';
+const secret = "mysecretsshhhhh";
+const expiration = "2h";
 
 module.exports = {
   // function for our authenticated routes
@@ -12,20 +12,23 @@ module.exports = {
 
     // ["Bearer", "<tokenvalue>"]
     if (req.headers.authorization) {
-      token = token.split(' ').pop().trim();
-    }
+      token = token.split(" ").pop().trim();
+    };
 
     if (!token) {
       return req;
-    }
+    };
 
     // verify token and get user data out of it
     try {
       const { data } = jwt.verify(token, secret, { maxAge: expiration });
       req.user = data;
     } catch {
-      console.log('Invalid token');
-    }
+      console.log("Invalid token");
+    };
+
+    // send to next endpoint
+    return req;
   },
   signToken: function ({ username, email, _id }) {
     const payload = { username, email, _id };
